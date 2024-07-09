@@ -1,0 +1,25 @@
+name: Deploy and Monitor Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create k8s Kind Cluster
+      uses: helm/kind-action@v1.2.0
+    - name: Output KIND info
+      run: |
+        kubectl config get-contexts
+
+    - name: Deploy Application
+      run: kubectl apply -f test.yaml
